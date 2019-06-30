@@ -1,10 +1,14 @@
 package pe.edu.cibertec.retrofirgitflow;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -16,14 +20,32 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     private TextView textViewResult;
+    private List<Post> postList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private PostAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        recyclerView =  findViewById(R.id.recycler_view);
         textViewResult = findViewById(R.id.textViewResult);
-        callService();
+
+        mAdapter = new PostAdapter(postList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+
+        prepareMovieData();
+
     }
+
+    private void prepareMovieData() {
+        callService();
+        mAdapter.notifyDataSetChanged();
+    }
+
 
     private void callService() {
         final Retrofit retrofit =  new Retrofit.Builder()
@@ -39,15 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!response.isSuccessful()){
                     textViewResult.setText("Code: " + response.code());
                 }else {
-                    List<Post> posts = response.body();
-                    for(Post post:posts){
-                        String content ="";
-                        content += "Id: " + post.getId() + "\n";
-                        content += "userId: " + post.getUserId() + "\n";
-                        content += "Title: " + post.getTitle() + "\n";
-                        content += "Body: " + post.getText() + "\n";
-                        textViewResult.append(content);
-                    }
+                    postList = response.body();
                 }
             }
 

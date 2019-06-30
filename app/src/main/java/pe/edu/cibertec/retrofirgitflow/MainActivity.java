@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!response.isSuccessful()){
                     textViewResult.setText("Code: " + response.code());
                 }else {
+                    textViewResult.setText("Funciono");
                     postList = response.body();
                 }
             }

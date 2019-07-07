@@ -36,6 +36,13 @@ public class MainActivity extends AppCompatActivity {
       // textViewResult.setText("Title" + postList.size());
 
         mAdapter = new PostAdapter(postList);
+        mAdapter.setOnItemClickListener(new PostAdapter.ClickListener(){
+
+            @Override
+            public void onItemClick(int position) {
+                TriggerClick.selectItem(postList.get(position).getId(),MainActivity.this);
+            }
+        });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         //recyclerView.setItemAnimator(new DefaultItemAnimator());

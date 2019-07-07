@@ -15,17 +15,31 @@ import java.util.List;
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
 
     private List<Post> postList;
+    private ClickListener clickListener;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView title, id_pos;
 
         public MyViewHolder(View view) {
             super(view);
-
+            view.setOnClickListener(this);
             id_pos = (TextView) view.findViewById(R.id.id_pos);
             title = (TextView) view.findViewById(R.id.title);
         }
+
+        @Override
+        public void onClick(View v) {
+         clickListener.onItemClick(getAdapterPosition());
+        }
     }
+
+    public final void setOnItemClickListener(ClickListener clickListener){
+        this.clickListener = clickListener;
+    }
+
+  public interface ClickListener{
+        void onItemClick(int position);
+  }
 
 
     public PostAdapter(List<Post> postList) {

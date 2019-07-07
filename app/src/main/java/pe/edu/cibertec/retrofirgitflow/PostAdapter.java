@@ -17,12 +17,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
     private List<Post> postList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, id;
+        public TextView title, id_pos;
 
         public MyViewHolder(View view) {
             super(view);
 
-            id = (TextView) view.findViewById(R.id.id);
+            id_pos = (TextView) view.findViewById(R.id.id_pos);
             title = (TextView) view.findViewById(R.id.title);
         }
     }
@@ -33,18 +33,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PostAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.datos_row, parent, false);
-        return new MyViewHolder(itemView);
+        return new PostAdapter.MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PostAdapter.MyViewHolder holder, int position) {
         Post post = postList.get(position);
 
-        holder.id.setText(post.getId());
+        holder.id_pos.setText( String.valueOf(post.getId()));
         holder.title.setText(post.getTitle());
-
     }
 
     @Override

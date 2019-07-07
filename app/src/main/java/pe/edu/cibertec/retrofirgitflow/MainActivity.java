@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView textViewResult;
+  //  private TextView textViewResult;
     private List<Post> postList = new ArrayList<>();
     private RecyclerView recyclerView;
     private PostAdapter mAdapter;
@@ -29,20 +30,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerView =  findViewById(R.id.recycler_view);
-        textViewResult = findViewById(R.id.textViewResult);
+       // textViewResult = findViewById(R.id.textViewResult);
+
+
+      // textViewResult.setText("Title" + postList.size());
 
         mAdapter = new PostAdapter(postList);
+        mAdapter.setOnItemClickListener(new PostAdapter.ClickListener(){
+
+            @Override
+            public void onItemClick(int position) {
+                TriggerClick.selectItem(postList.get(position).getId(),MainActivity.this);
+            }
+        });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        //recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-        prepareMovieData();
+        callService();
 
     }
 
     private void prepareMovieData() {
-        callService();
+
         mAdapter.notifyDataSetChanged();
     }
 
@@ -59,16 +70,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 if(!response.isSuccessful()){
-                    textViewResult.setText("Code: " + response.code());
+                  //textViewResult.setText("Code: " + response.code());
+                    Log.e("Response; ", "response.code: " + response.code());
                 }else {
-                    textViewResult.setText("Funciono");
-                    postList = response.body();
+                    Log.e("Response; ", "response.body: " + response.body().size());
+                    postList.addAll(response.body());
+                    mAdapter.notifyDataSetChanged();
+                    //textViewResult.setText("Title" + postList.get(0).getTitle());
                 }
             }
 
             @Override
             public void onFailure(Call<List<Post>> call, Throwable t) {
-              textViewResult.setText(t.getMessage());
+              //textViewResult.setText(t.getMessage());
+                Log.e("Response; ", "t.getMessage(): " + t.getMessage());
               t.printStackTrace();
             }
         });

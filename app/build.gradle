@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file("$rootDir/keystore.jks")
+            storePassword '123456'
+            keyAlias = 'Cibertec'
+            keyPassword '123456'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "pe.edu.cibertec.retrofirgitflow"
@@ -14,6 +22,19 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    flavorDimensions "default"
+    productFlavors {
+        free {
+            applicationId = "pe.edu.cibertec.retrofirgitflow.free"
+            versionName = "1.0-free"
+        }
+        paid {
+            applicationIdSuffix = ".paid"
+            versionNameSuffix = "-paid"
         }
     }
 }

@@ -1,10 +1,15 @@
 package pe.edu.cibertec.retrofirgitflow;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -15,15 +20,36 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView textViewResult;
+  //  private TextView textViewResult;
+    private List<Post> postList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private PostAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        textViewResult = findViewById(R.id.textViewResult);
+        recyclerView =  findViewById(R.id.recycler_view);
+       // textViewResult = findViewById(R.id.textViewResult);
+
+
+      // textViewResult.setText("Title" + postList.size());
+
+        mAdapter = new PostAdapter(postList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        //recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+
         callService();
+
     }
+
+    private void prepareMovieData() {
+
+        mAdapter.notifyDataSetChanged();
+    }
+
 
     private void callService() {
         final Retrofit retrofit =  new Retrofit.Builder()
@@ -37,23 +63,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 if(!response.isSuccessful()){
-                    textViewResult.setText("Code: " + response.code());
+                  //textViewResult.setText("Code: " + response.code());
+                    Log.e("Response; ", "response.code: " + response.code());
                 }else {
-                    List<Post> posts = response.body();
-                    for(Post post:posts){
-                        String content ="";
-                        content += "Id: " + post.getId() + "\n";
-                        content += "userId: " + post.getUserId() + "\n";
-                        content += "Title: " + post.getTitle() + "\n";
-                        content += "Body: " + post.getText() + "\n";
-                        textViewResult.append(content);
-                    }
+                    Log.e("Response; ", "response.body: " + response.body().size());
+                    postList.addAll(response.body());
+                    mAdapter.notifyDataSetChanged();
+                    //textViewResult.setText("Title" + postList.get(0).getTitle());
                 }
             }
 
             @Override
             public void onFailure(Call<List<Post>> call, Throwable t) {
-              textViewResult.setText(t.getMessage());
+              //textViewResult.setText(t.getMessage());
+                Log.e("Response; ", "t.getMessage(): " + t.getMessage());
               t.printStackTrace();
             }
         });

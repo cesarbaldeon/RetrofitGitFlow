@@ -1,4 +1,4 @@
-package pe.edu.cibertec.retrofirgitflow;
+package pe.edu.cibertec.retrofirgitflow.data.entities;
 
 import com.google.gson.annotations.SerializedName;
 

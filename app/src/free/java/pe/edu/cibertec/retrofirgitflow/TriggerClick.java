@@ -1,8 +1,9 @@
 package pe.edu.cibertec.retrofirgitflow;
 
 
-import android.content.Intent;
 import android.widget.Toast;
+
+import pe.edu.cibertec.retrofirgitflow.presentation.main.view.MainActivity;
 
 
 public class TriggerClick {

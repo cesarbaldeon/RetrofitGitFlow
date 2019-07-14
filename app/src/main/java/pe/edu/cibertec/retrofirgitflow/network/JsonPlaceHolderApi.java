@@ -1,7 +1,8 @@
-package pe.edu.cibertec.retrofirgitflow;
+package pe.edu.cibertec.retrofirgitflow.network;
 
 import java.util.List;
 
+import pe.edu.cibertec.retrofirgitflow.data.entities.Post;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;

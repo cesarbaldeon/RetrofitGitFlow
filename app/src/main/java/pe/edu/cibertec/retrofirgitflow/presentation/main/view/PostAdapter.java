@@ -1,4 +1,4 @@
-package pe.edu.cibertec.retrofirgitflow;
+package pe.edu.cibertec.retrofirgitflow.presentation.main.view;
 
 
 import android.view.LayoutInflater;
@@ -12,35 +12,35 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import pe.edu.cibertec.retrofirgitflow.R;
+import pe.edu.cibertec.retrofirgitflow.data.entities.Post;
+
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
 
+    private IPostClickListener clickListener;
     private List<Post> postList;
-    private ClickListener clickListener;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title, id_pos;
 
         public MyViewHolder(View view) {
             super(view);
-            view.setOnClickListener(this);
+            view.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            if (clickListener != null) {
+                                                clickListener.onClick(getAdapterPosition());
+                                            }
+                                        }
+                                    });
             id_pos = (TextView) view.findViewById(R.id.id_pos);
             title = (TextView) view.findViewById(R.id.title);
         }
-
-        @Override
-        public void onClick(View v) {
-         clickListener.onItemClick(getAdapterPosition());
-        }
     }
 
-    public final void setOnItemClickListener(ClickListener clickListener){
+    public final void setOnItemClickListener(IPostClickListener clickListener){
         this.clickListener = clickListener;
     }
-
-  public interface ClickListener{
-        void onItemClick(int position);
-  }
-
 
     public PostAdapter(List<Post> postList) {
         this.postList = postList;
@@ -56,7 +56,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
     public void onBindViewHolder(@NonNull PostAdapter.MyViewHolder holder, int position) {
         Post post = postList.get(position);
 
-        holder.id_pos.setText( String.valueOf(post.getId()));
+        holder.id_pos.setText(String.valueOf(post.getId()));
         holder.title.setText(post.getTitle());
     }
 

@@ -1,13 +1,20 @@
 package pe.edu.cibertec.retrofirgitflow.presentation.post_detail.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import pe.edu.cibertec.retrofirgitflow.R;
+import pe.edu.cibertec.retrofirgitflow.data.entities.Comment;
 import pe.edu.cibertec.retrofirgitflow.data.entities.Post;
+import pe.edu.cibertec.retrofirgitflow.domain.commet_interactor.CommentInteractorImpl;
 import pe.edu.cibertec.retrofirgitflow.domain.post_detail_interactor.PostInteractorImpl;
 import pe.edu.cibertec.retrofirgitflow.presentation.post_detail.IPostDetailContract;
 import pe.edu.cibertec.retrofirgitflow.presentation.post_detail.presenter.PostPresenter;
@@ -18,14 +25,24 @@ public class PostDetailActivity extends AppCompatActivity implements IPostDetail
     private int postid;
      PostPresenter presenter;
     private TextView textViewResult;
+    private List<Comment> commentList = new ArrayList<>();
+    private RecyclerView recyclerViewComment;
+    private CommentAdapter commentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
         textViewResult = findViewById(R.id.textViewResult);
-        presenter = new PostPresenter(new PostInteractorImpl());
+        recyclerViewComment = findViewById(R.id.recyclerViewComment);
+
+        presenter = new PostPresenter(new PostInteractorImpl(), new CommentInteractorImpl());
         presenter.attachView(this);
+
+        commentAdapter = new CommentAdapter(commentList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerViewComment.setLayoutManager(mLayoutManager);
+        recyclerViewComment.setAdapter(commentAdapter);
 
         postid = getIntent().getIntExtra("post_id",-1);
 
@@ -34,6 +51,7 @@ public class PostDetailActivity extends AppCompatActivity implements IPostDetail
             finish();
         }
       presenter.getPost(postid);
+      presenter.getCommets(postid);
 
     }
 
@@ -44,10 +62,16 @@ public class PostDetailActivity extends AppCompatActivity implements IPostDetail
 
     @Override
     public void getPostSuccess(Post post) {
-        textViewResult.setText("Id" + String.valueOf(post.getId()) + "\n"
-                +"UserId" + String.valueOf(post.getUserId()) + "\n"
-                + "Title" + post.getTitle() + "\n"
-                + "Text" + post.getText() + "\n");
+        textViewResult.setText("Id: " + String.valueOf(post.getId()) + "\n"
+                +"UserId: " + String.valueOf(post.getUserId()) + "\n"
+                + "Title: " + post.getTitle() + "\n"
+                + "Text: " + post.getText() + "\n");
+    }
+
+    @Override
+    public void getCommentSuccess(List<Comment> commentList) {
+        this.commentList.addAll(commentList);
+        commentAdapter.notifyDataSetChanged();
     }
 
     @Override

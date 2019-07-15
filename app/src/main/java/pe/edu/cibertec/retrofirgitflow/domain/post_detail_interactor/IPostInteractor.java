@@ -11,13 +11,6 @@ public interface IPostInteractor {
         void onError(String errorMsg);
     }
 
-  /*  interface IPostCommentCallBack{
-        void onSuccess(List<Comment> comments);
-        void onError(String errorMsg);
-    }
-*/
     void getPost(int postid,IPostCallBack callBack);
-
-  //  void getCommentsOfPost(int postId,IPostCommentCallBack callBack);
 
 }

@@ -5,8 +5,11 @@ import java.util.List;
 import pe.edu.cibertec.retrofirgitflow.data.entities.Comment;
 import pe.edu.cibertec.retrofirgitflow.data.entities.Post;
 import retrofit2.Call;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface JsonPlaceHolderApi {
 
@@ -16,7 +19,7 @@ public interface JsonPlaceHolderApi {
     @GET("posts/{id}")
     Call<Post> getPost(@Path("id") int postId);
 
-    @GET("/posts/{id}/comments")
-    Call<List<Comment>> getCommets(@Path("id") int postId);
+    @GET("/comments")
+    Call<List<Comment>> getCommets(@Query("postId") int postId);
 
 }

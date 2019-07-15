@@ -24,7 +24,7 @@ public class PostDetailActivity extends AppCompatActivity implements IPostDetail
     private Post post = new Post();
     private int postid;
      PostPresenter presenter;
-    private TextView textViewResult;
+    private TextView txtId,txtUserId,txtTitle,txtTexto;
     private List<Comment> commentList = new ArrayList<>();
     private RecyclerView recyclerViewComment;
     private CommentAdapter commentAdapter;
@@ -33,7 +33,11 @@ public class PostDetailActivity extends AppCompatActivity implements IPostDetail
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
-        textViewResult = findViewById(R.id.textViewResult);
+        txtId = findViewById(R.id.txtid);
+        txtUserId = findViewById(R.id.txtUserId);
+        txtTitle = findViewById(R.id.txtTitle);
+        txtTexto = findViewById(R.id.txtTexto);
+
         recyclerViewComment = findViewById(R.id.recyclerViewComment);
 
         presenter = new PostPresenter(new PostInteractorImpl(), new CommentInteractorImpl());
@@ -62,10 +66,11 @@ public class PostDetailActivity extends AppCompatActivity implements IPostDetail
 
     @Override
     public void getPostSuccess(Post post) {
-        textViewResult.setText("Id: " + String.valueOf(post.getId()) + "\n"
-                +"UserId: " + String.valueOf(post.getUserId()) + "\n"
-                + "Title: " + post.getTitle() + "\n"
-                + "Text: " + post.getText() + "\n");
+
+        txtId.setText("Id: " + String.valueOf(post.getId()));
+        txtUserId.setText("UserId: " + String.valueOf(post.getUserId()));
+        txtTitle.setText("Title: " + post.getTitle());
+        txtTexto.setText("Body: " + post.getText() );
     }
 
     @Override

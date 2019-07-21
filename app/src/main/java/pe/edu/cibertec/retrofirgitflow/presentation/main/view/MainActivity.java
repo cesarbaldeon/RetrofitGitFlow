@@ -15,6 +15,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import pe.edu.cibertec.retrofirgitflow.MyApplication;
 import pe.edu.cibertec.retrofirgitflow.R;
 import pe.edu.cibertec.retrofirgitflow.TriggerClick;
 import pe.edu.cibertec.retrofirgitflow.data.entities.Post;
@@ -37,13 +40,20 @@ public class MainActivity extends AppCompatActivity
     private List<Post> postList = new ArrayList<>();
     private RecyclerView recyclerView;
     private PostAdapter mAdapter;
-    private MainPresenter presenter;
+    @Inject
+     MainPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        presenter = new MainPresenter(new MainInteractorImpl());
+
+        MyApplication application = (MyApplication)getApplication();
+
+        application.getAppComponent().inject(this);
+        //presenter = new MainPresenter(new MainInteractorImpl());
+
+
         presenter.attachView(this);
 
         recyclerView =  findViewById(R.id.recycler_view);

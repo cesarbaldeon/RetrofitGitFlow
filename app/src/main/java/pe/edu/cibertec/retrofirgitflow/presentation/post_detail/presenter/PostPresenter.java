@@ -2,6 +2,8 @@ package pe.edu.cibertec.retrofirgitflow.presentation.post_detail.presenter;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import pe.edu.cibertec.retrofirgitflow.data.entities.Comment;
 import pe.edu.cibertec.retrofirgitflow.data.entities.Post;
 import pe.edu.cibertec.retrofirgitflow.domain.commet_interactor.ICommentInterator;
@@ -10,9 +12,10 @@ import pe.edu.cibertec.retrofirgitflow.presentation.post_detail.IPostDetailContr
 
 public class PostPresenter implements IPostDetailContract.IPresenter {
     IPostDetailContract.IView view;
-    IPostInteractor interactor;
-    ICommentInterator interatorComment;
+    private final IPostInteractor interactor;
+    private final ICommentInterator interatorComment;
 
+    @Inject
     public PostPresenter(IPostInteractor postInteractor,ICommentInterator commentInterator) {
         this.interactor = postInteractor;
         this.interatorComment = commentInterator;

@@ -11,6 +11,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import pe.edu.cibertec.retrofirgitflow.MyApplication;
 import pe.edu.cibertec.retrofirgitflow.R;
 import pe.edu.cibertec.retrofirgitflow.data.entities.Comment;
 import pe.edu.cibertec.retrofirgitflow.data.entities.Post;
@@ -23,7 +26,8 @@ import pe.edu.cibertec.retrofirgitflow.presentation.post_detail.presenter.PostPr
 public class PostDetailActivity extends AppCompatActivity implements IPostDetailContract.IView {
     private Post post = new Post();
     private int postid;
-     PostPresenter presenter;
+    @Inject
+    PostPresenter presenter;
     private TextView txtId,txtUserId,txtTitle,txtTexto;
     private List<Comment> commentList = new ArrayList<>();
     private RecyclerView recyclerViewComment;
@@ -39,8 +43,11 @@ public class PostDetailActivity extends AppCompatActivity implements IPostDetail
         txtTexto = findViewById(R.id.txtTexto);
 
         recyclerViewComment = findViewById(R.id.recyclerViewComment);
+        MyApplication application = (MyApplication)getApplication();
+        application.getAppComponent().inject(this);
 
-        presenter = new PostPresenter(new PostInteractorImpl(), new CommentInteractorImpl());
+        //presenter = new PostPresenter(new PostInteractorImpl(), new CommentInteractorImpl());
+
         presenter.attachView(this);
 
         commentAdapter = new CommentAdapter(commentList);
